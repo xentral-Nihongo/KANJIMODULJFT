@@ -1,0 +1,1280 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanji Modul Praktis JFT Basic A2 — Kuis Kanji 2 Part</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f2ede0;
+        --paper-line: #c9beaa;
+        --ink: #22201b;
+        --ink-soft: #5a5348;
+        --hanko: #a8402f;
+        --hanko-soft: #c76a54;
+        --indigo: #2f4858;
+        --ok: #3c7a5e;
+        --card: #fbf9f3;
+        --skip: #8a7238;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background:
+          radial-gradient(
+            circle at 15% 20%,
+            rgba(168, 64, 47, 0.04),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 80%,
+            rgba(47, 72, 88, 0.05),
+            transparent 45%
+          ),
+          var(--paper);
+        color: var(--ink);
+        font-family: "Zen Kaku Gothic New", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 16px 60px;
+      }
+      header {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid var(--paper-line);
+        padding-bottom: 16px;
+      }
+      header h1 {
+        font-family: "Shippori Mincho", serif;
+        font-size: 22px;
+        font-weight: 500;
+        margin: 0 0 6px;
+      }
+      header h1 span {
+        color: var(--hanko);
+      }
+      header p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+        max-width: 58ch;
+      }
+
+      .group-bar {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .group-btn {
+        padding: 10px 14px;
+        border: 1px solid var(--ink);
+        background: #fff;
+        color: var(--ink);
+        font-family: "Zen Kaku Gothic New", sans-serif;
+        font-size: 13.5px;
+        cursor: pointer;
+      }
+      .group-btn:hover {
+        background: #efe9da;
+      }
+      .group-btn.active {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .navgrid-wrap {
+        width: 100%;
+        max-width: 600px;
+        border: 1px solid var(--paper-line);
+        background: var(--card);
+        padding: 12px;
+        margin-bottom: 16px;
+        max-height: 190px;
+        overflow-y: auto;
+        display: none;
+      }
+      .navgrid-title {
+        font-size: 11px;
+        color: var(--ink-soft);
+        margin-bottom: 8px;
+        letter-spacing: 0.04em;
+        line-height: 1.5;
+      }
+      .navgrid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .navtile {
+        padding: 5px 8px;
+        font-size: 13px;
+        border: 1px solid var(--paper-line);
+        background: #fff;
+        color: var(--ink);
+        cursor: pointer;
+        font-family: "Noto Serif JP", serif;
+        transition: background 0.1s ease;
+      }
+      .navtile:hover {
+        border-color: var(--ink);
+      }
+      .navtile.correct {
+        background: #e7f2ec;
+        border-color: var(--ok);
+        color: var(--ok);
+      }
+      .navtile.wrong {
+        background: #f7e9e6;
+        border-color: var(--hanko);
+        color: var(--hanko);
+      }
+      .navtile.skipped {
+        background: #f3ecd9;
+        border-color: var(--skip);
+        color: var(--skip);
+      }
+      .navtile.viewing {
+        outline: 2px solid var(--indigo);
+        outline-offset: 1px;
+      }
+
+      main {
+        width: 100%;
+        max-width: 600px;
+      }
+      .stage {
+        background: var(--card);
+        border: 1px solid var(--paper-line);
+        padding: 26px 22px 22px;
+        position: relative;
+        min-height: 120px;
+      }
+      .empty-state {
+        text-align: center;
+        color: var(--ink-soft);
+        font-size: 14px;
+        padding: 34px 10px;
+        line-height: 1.7;
+      }
+
+      .stage-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+      }
+      #orderToggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border: 1px solid var(--ink-soft);
+        background: #fff;
+        color: var(--ink);
+        font-family: "Zen Kaku Gothic New", sans-serif;
+        font-size: 12.5px;
+        cursor: pointer;
+      }
+      #orderToggle:hover {
+        border-color: var(--ink);
+        background: #efe9da;
+      }
+
+      .progressbar {
+        height: 2px;
+        background: var(--paper-line);
+        width: 100%;
+        margin-bottom: 22px;
+        position: relative;
+        overflow: hidden;
+      }
+      .progressbar i {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: var(--hanko-soft);
+        width: 0%;
+        transition: width 0.25s ease;
+      }
+
+      .cell {
+        width: 130px;
+        height: 130px;
+        margin: 0 auto 22px;
+        border: 1.5px solid var(--ink);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          linear-gradient(
+            to right,
+            transparent calc(50% - 0.5px),
+            rgba(34, 32, 27, 0.18) calc(50% - 0.5px),
+            rgba(34, 32, 27, 0.18) calc(50% + 0.5px),
+            transparent calc(50% + 0.5px)
+          ),
+          linear-gradient(
+            to bottom,
+            transparent calc(50% - 0.5px),
+            rgba(34, 32, 27, 0.18) calc(50% - 0.5px),
+            rgba(34, 32, 27, 0.18) calc(50% + 0.5px),
+            transparent calc(50% + 0.5px)
+          );
+      }
+      .cell span {
+        font-family: "Noto Serif JP", serif;
+        font-weight: 600;
+        font-size: 44px;
+        line-height: 1.1;
+        color: var(--ink);
+        user-select: none;
+        text-align: center;
+        padding: 0 4px;
+      }
+      .cell.short span {
+        font-size: 28px;
+      }
+
+      .question-label {
+        text-align: center;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        margin: -8px 0 16px;
+        letter-spacing: 0.05em;
+      }
+
+      .options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .opt {
+        padding: 14px 12px;
+        border: 1px solid var(--ink-soft);
+        background: #fff;
+        color: var(--ink);
+        text-align: left;
+        font-size: 16px;
+        font-family: "Noto Serif JP", serif;
+        cursor: pointer;
+        transition:
+          background 0.12s ease,
+          border-color 0.12s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .opt .num {
+        font-size: 11px;
+        color: var(--ink-soft);
+        border: 1px solid var(--paper-line);
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-family: "Zen Kaku Gothic New", sans-serif;
+      }
+      .opt:hover:not(.locked) {
+        background: #efe9da;
+      }
+      .opt.locked {
+        cursor: default;
+      }
+      .opt.correct {
+        border-color: var(--ok);
+        background: #e7f2ec;
+        color: var(--ok);
+        font-weight: 700;
+      }
+      .opt.wrong {
+        border-color: var(--hanko);
+        background: #f7e9e6;
+        color: var(--hanko);
+        font-weight: 700;
+      }
+      .opt.dim {
+        opacity: 0.5;
+      }
+      .opt:focus-visible {
+        outline: 2px solid var(--indigo);
+        outline-offset: 2px;
+      }
+
+      .rowbtns {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      button.plain {
+        font-family: "Zen Kaku Gothic New", sans-serif;
+        font-size: 14px;
+        padding: 9px 14px;
+        border: 1px solid var(--ink);
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      button.plain:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .ghost {
+        border-color: transparent;
+        color: var(--ink-soft);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        padding: 8px 2px;
+        background: none;
+        cursor: pointer;
+        font-family: "Zen Kaku Gothic New", sans-serif;
+        font-size: 14px;
+      }
+      .ghost:hover {
+        background: transparent;
+        color: var(--hanko);
+      }
+      #nextBtn {
+        background: var(--hanko);
+        border-color: var(--hanko);
+        color: #fdf8f1;
+        display: none;
+      }
+      #nextBtn:hover {
+        background: #8c3225;
+        border-color: #8c3225;
+      }
+
+      .explain {
+        display: none;
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px dashed var(--paper-line);
+        animation: reveal 0.22s ease;
+      }
+      .explain.show {
+        display: block;
+      }
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .verdict {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .stamp {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        font-weight: 700;
+        border: 2px solid;
+        margin-top: 1px;
+      }
+      .stamp.ok {
+        color: var(--ok);
+        border-color: var(--ok);
+      }
+      .stamp.no {
+        color: var(--hanko);
+        border-color: var(--hanko);
+      }
+      .stamp.sk {
+        color: var(--skip);
+        border-color: var(--skip);
+      }
+      .verdict-text {
+        font-size: 14.5px;
+        line-height: 1.6;
+      }
+      .verdict-text b {
+        font-family: "Noto Serif JP", serif;
+        font-size: 17px;
+      }
+
+      footer {
+        width: 100%;
+        max-width: 600px;
+        margin-top: 18px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      footer .stat b {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .round-toast {
+        max-width: 600px;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 12.5px;
+        color: var(--indigo);
+        text-align: center;
+        display: none;
+      }
+      .round-toast.show {
+        display: block;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .explain {
+          animation: none;
+        }
+        .progressbar i {
+          transition: none;
+        }
+      }
+      @media (max-width: 480px) {
+        .options {
+          grid-template-columns: 1fr;
+        }
+        .cell {
+          width: 110px;
+          height: 110px;
+        }
+        .cell span {
+          font-size: 30px;
+        }
+        header h1 {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ================= TEMPEL HTML POP-UP DI SINI (TEPAT DI BAWAH <body>) ================= -->
+    <div
+      id="customPopup"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(34, 32, 27, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      "
+    >
+      <div
+        style="
+          background: #fbf9f3;
+          border: 1.5px solid #22201b;
+          padding: 28px 24px;
+          max-width: 380px;
+          width: 100%;
+          text-align: center;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+          animation: popupFadeIn 0.25s ease;
+        "
+      >
+        <h3
+          style="
+            font-family: &quot;Shippori Mincho&quot;, serif;
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0 0 10px;
+            color: #22201b;
+          "
+        >
+          Jangan Lupa Follow! 👋
+        </h3>
+        <p
+          style="
+            font-size: 14px;
+            color: #5a5348;
+            line-height: 1.6;
+            margin: 0 0 20px;
+          "
+        >
+          Dukung terus pembuat kuis ini dengan mengikuti Instagram
+          <b style="color: #a8402f">@xnpall.xd</b> ya!
+        </p>
+        <button
+          type="button"
+          id="closePopupBtn"
+          style="
+            width: 100%;
+            padding: 11px;
+            background: #a8402f;
+            border: 1px solid #a8402f;
+            color: #fdf8f1;
+            font-family: &quot;Zen Kaku Gothic New&quot;, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 700;
+          "
+        >
+          Siap, Mengerti!
+        </button>
+      </div>
+    </div>
+
+    <header>
+      <h1>Kanji Modul <span>JFT Basic</span> — Kuis Kanji (Hiragana)</h1>
+      <p>
+        217 kosakata dari modul Kanji JFT Basic, dibagi menjadi 2 Part dengan
+        pilihan jawaban dalam bentuk Hiragana. Kanji bersumber dari buku Modul
+        Praktis JFT A2 Basic, 217 Kanji adalah hasil sortiran Saya
+      </p>
+    </header>
+
+    <div class="group-bar" id="groupBar"></div>
+
+    <div class="navgrid-wrap" id="navWrap">
+      <div class="navgrid-title">
+        Daftar soal di part ini — klik untuk melihat kembali (hijau = benar,
+        merah = salah, kuning = dilewati)
+      </div>
+      <div class="navgrid" id="navGrid"></div>
+    </div>
+
+    <main>
+      <div class="stage" id="stage">
+        <div class="empty-state" id="emptyState">
+          👆 Pilih salah satu part di atas dulu untuk mulai kuisnya.
+        </div>
+
+        <div id="quizBody" style="display: none">
+          <div class="stage-toolbar">
+            <button type="button" id="orderToggle">
+              <span class="icon">🔀</span
+              ><span id="orderToggleLabel">Acak</span>
+            </button>
+          </div>
+          <div class="progressbar"><i id="progressFill"></i></div>
+          <div class="cell" id="cell"><span id="kanjiText">易しい</span></div>
+          <div class="question-label" id="questionLabel">
+            Bacaannya yang mana?
+          </div>
+
+          <div class="options" id="options"></div>
+
+          <div class="rowbtns">
+            <button type="button" id="skipBtn" class="ghost">
+              Nggak tahu, lihat jawaban
+            </button>
+            <button type="button" id="nextBtn" class="plain">Lanjut →</button>
+            <button type="button" id="resetBtn" class="ghost">
+              Ulang dari awal
+            </button>
+          </div>
+
+          <div class="explain" id="explain">
+            <div class="verdict">
+              <div class="stamp" id="stamp">✓</div>
+              <div class="verdict-text" id="verdictText"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <span class="stat">Benar: <b id="scoreOk">0</b></span>
+        <span class="stat">Salah: <b id="scoreNo">0</b></span>
+        <span class="stat"
+          >Terjawab: <b id="posNum">0</b> dari <b id="totalNum">0</b></span
+        >
+        <span class="stat">Putaran: <b id="roundNum">1</b></span>
+      </footer>
+      <div class="round-toast" id="roundToast">
+        🎉 Satu putaran penuh selesai! Lanjut, soal diacak ulang.
+      </div>
+    </main>
+
+    <script>
+      /* ================= DATA DARI GAMBAR LIST KANJI (217 DATA) ================= */
+      const RAW = [
+        ["易しい", "やさしい", "baik hati"],
+        ["掃除します", "そうじします", "beres beres"],
+        ["居間", "いま", "ruang tamu"],
+        ["質問", "しつもん", "pertanyaan"],
+        ["お風呂", "おふろ", "kamar mandi"],
+        ["台風", "たいふう", "angin topan"],
+        ["窓", "まど", "jendela"],
+        ["悪い", "わるい", "jelek"],
+        ["思います", "おもいます", "pikir"],
+        ["宿題", "しゅくだい", "pr"],
+        ["問題", "もんだい", "masalah,soal"],
+        ["電子辞書", "でんしじしょ", "kamus elektronik"],
+        ["ゴミ箱", "ごみばこ", "tempat sampah"],
+        ["言葉", "ことば", "kosakata"],
+        ["弁当", "べんとう", "bekal"],
+        ["本当", "ほんとう", "benar benar"],
+        ["意味", "いみ", "arti"],
+        ["趣味", "しゅみ", "hobi"],
+        ["味", "あじ", "rasa"],
+        ["難しい", "むずかしい", "sulit"],
+        ["嫌い", "きらい", "benci"],
+        ["正しい", "ただしい", "benar"],
+        ["上手", "じょうず", "pintar"],
+        ["忙しい", "いそがしい", "sibuk"],
+        ["簡単", "かんたん", "mudah"],
+        ["数学", "すうがく", "matematika"],
+        ["漢字", "かんじ", "kanji"],
+        ["練習", "れんしゅう", "latihan"],
+        ["復習", "ふくしゅう", "pengulangan"],
+        ["失敗します", "しっぱいします", "gagal (ujian)"],
+        ["雪", "ゆき", "salju"],
+        ["曇", "くも", "mendung"],
+        ["雷", "かみなり", "petir"],
+        ["電車", "でんしゃ", "mobil"],
+        ["地震", "じしん", "gempa bumi"],
+        ["雲", "くも", "awan"],
+        ["小説", "しょうせつ", "novel"],
+        ["小説家", "しょうせつか", "novelis"],
+        ["釣り", "つり", "mancing"],
+        ["弾きます", "ひきます", "memainkan (alat musik)"],
+        ["引きます", "ひきます", "menarik"],
+        ["描きます", "かきます", "menggambar"],
+        ["猫", "ねこ", "kucing"],
+        ["田舎", "いなか", "kampung halaman"],
+        ["地下鉄", "ちかてつ", "kereta bawah tanah"],
+        ["連休", "れんきゅう", "libur panjang"],
+        ["お土産", "おみやげ", "oleh oleh"],
+        ["止まります", "とまります", "berhenti"],
+        ["泊まります", "とまります", "menginap"],
+        ["変えます", "かえます", "mengganti"],
+        ["お祈りします", "おいのりします", "berdoa/beribadah"],
+        ["連れていきます", "つれていきます", "membawa pergi"],
+        ["暇", "ひま", "senggang"],
+        ["船", "ふね", "kapal"],
+        ["服", "ふく", "baju"],
+        ["新聞", "しんぶん", "koran"],
+        ["舌", "した", "lidah"],
+        ["肩", "かた", "bahu"],
+        ["指", "ゆび", "jari"],
+        ["事故", "じこ", "kecelakaan"],
+        ["救急車", "きゅうきゅうしゃ", "ambulans"],
+        ["体温計", "たいおんけい", "thermometer"],
+        ["体温", "たいおん", "suhu tubuh"],
+        ["冷やします", "ひやします", "mendinginkan"],
+        ["退院します", "たいいんします", "keluar rumah sakit"],
+        ["背が高い", "せがたかい", "tinggi (badan)"],
+        ["太い", "ふとい", "gendut"],
+        ["変（な）", "へん（な）", "aneh"],
+        ["佐藤", "さとう", "gula"],
+        ["豆腐", "とうふ", "tahu"],
+        ["苦い", "にがい", "pahit"],
+        ["冷蔵庫", "れいぞうこ", "kulkas"],
+        ["玉ねぎ", "たまねぎ", "bawang bombay"],
+        ["焼きます", "やきます", "memanggang"],
+        ["迎えます", "むかえます", "menjemput"],
+        ["紹介します", "しょうかいします", "perkenalkan"],
+        ["守ります", "まもります", "melindungi"],
+        ["僕", "ぼく", "saya"],
+        ["知り合い", "しりあい", "kenalan"],
+        ["引き出し", "ひきだし", "lemari"],
+        ["電池", "でんち", "baterai"],
+        ["電源", "でんげん", "listrik (power supply)"],
+        ["電源を切る", "でんげんをきる", "mematikan daya"],
+        ["電源を入れる", "でんげんをいれる", "menyalakan daya"],
+        ["止めます", "とめます", "memakirkan"],
+        ["回ります", "まわります", "memutar"],
+        ["戻します", "もどします", "mengembalikan"],
+        ["修理します", "しゅうりします", "memperbaiki"],
+        ["授業", "じゅぎょう", "pelajaran"],
+        ["結果", "けっか", "hasil"],
+        ["申込書", "もうしこみ", "pendaftaran"],
+        ["受験票", "じゅけんひょう", "kartu peserta ujian"],
+        ["身分証明書", "みぶんしょうめいしょ", "kartu identitas"],
+        ["覚えます", "おぼえます", "mengingat"],
+        ["受けます", "うけます", "mengikuti ujian/menerima"],
+        ["助けます", "たすけます", "menolong"],
+        ["記入します", "きにゅうします", "mengisi formulir"],
+        ["受験料", "じゅけんりょう", "biaya ujian"],
+        ["成功します", "せいこうします", "berhasil/sukses"],
+        ["招待状", "しょうたいじょう", "kartu undangan"],
+        ["出産", "しゅっさん", "kelahiran bayi"],
+        ["過ごします", "すごします", "melalui/menghabiskan(waktu)"],
+        ["招待します", "しょうたいします", "mengundang"],
+        ["遅れます", "おくれます", "terlambat"],
+        ["伝えます", "つたえます", "menyampaikan pesan"],
+        ["口座", "こうざ", "rekening bank"],
+        ["口座番号", "こうざばんごう", "nomor rekening bank"],
+        ["暗証番号", "あんしょばんごう", "nomor pin"],
+        ["金額", "きんがく", "jumlah uang"],
+        ["お釣り", "おつり", "uang kembalian"],
+        ["現金", "げんきん", "uang tunai"],
+        ["借金", "しゃっきん", "uang pinjaman"],
+        ["送料", "そうりょう", "biaya kirim"],
+        ["宅配便", "たくはいびん", "delivery (layanan kirim ke rumah)"],
+        ["下ろします", "おろします", "mengambil uang"],
+        ["払います", "はらいます", "membayar"],
+        ["利用します", "りようします", "memanfaatkan"],
+        ["確認します", "かくにん", "memastikan"],
+        ["良い", "いい・よい", "bagus"],
+        ["急に", "きゅうに", "tiba tiba"],
+        ["電波", "でんぱ", "sinyal"],
+        ["有料", "ゆうりょう", "berbayar"],
+        ["返事", "へんじ", "balasan"],
+        ["動画", "どうが", "video"],
+        ["通話", "つうわ", "panggilan telpon"],
+        ["料金", "りょうきん", "biaya"],
+        ["切れます", "きれます", "terputus"],
+        ["足ります", "たります", "cukup"],
+        ["決めます", "きめます", "memutuskan"],
+        ["見つけます", "みつけます", "menemukan"],
+        ["手伝います", "てつだいます", "membantu"],
+        ["大使館", "たいしかん", "kantor duta besar"],
+        ["大学院", "だいがくいん", "s2"],
+        ["飛行機", "ひこうき", "pesawat"],
+        ["部長", "ぶちょう", "manajer"],
+        ["出張", "しゅっちょう", "perjalanan dinas"],
+        ["外します", "はずします", "melepaskan"],
+        ["呼びます", "よびます", "memanggil"],
+        ["現場", "げんば", "tempat kerja lapangan"],
+        ["工場", "こうじょう", "pabrik"],
+        ["工事", "こうじ", "kerja konstruksi"],
+        ["火事", "かじ", "kebakaran"],
+        ["部品", "ぶひん", "pratisi mesin"],
+        ["信じます", "しんじます", "mempercayai"],
+        ["閉じます", "とじます", "menutup (mata)"],
+        ["安心します", "あんしんします", "lega"],
+        ["別れます", "わかれます", "berpisah"],
+        ["考えます", "かんがえます", "memikirkan"],
+        ["幸せ", "しあわせ", "bahagia"],
+        ["全て", "すべて", "semuanya"],
+        ["不安", "ふあん", "gelisah"],
+        ["自信", "じしん", "percaya diri"],
+        ["安全", "あんぜん", "aman"],
+        ["日々", "ひび", "hari hari"],
+        ["涙", "なみだ", "air mata"],
+        ["君", "きみ", "kamu"],
+        ["波", "なみ", "ombak"],
+        ["死にます", "しにます", "tewas, mati"],
+        ["亡くなります", "なくなります", "meninggal"],
+        ["焼けます", "やけます", "terbakar"],
+        ["助けます", "たすけます", "menolong"],
+        ["折れます", "おれます", "patah"],
+        ["落ちます", "おちます", "jatuh"],
+        ["飛びます", "とびます", "terbang"],
+        ["交通", "こうつう", "lalu lintas"],
+        ["建物", "たてもの", "bangunan"],
+        ["原因", "げんいん", "penyebab"],
+        ["天気予報", "てんきよほう", "perkiraan cuaca"],
+        ["転勤します", "てんきんします", "mutasi kerja"],
+        ["建てます", "たてます", "mendirikan"],
+        ["運びます", "はこびます", "mengangkut"],
+        ["探します", "さがします", "mencari"],
+        ["片づけます", "かたづけます", "membereskan"],
+        ["家賃", "やちん", "biaya sewa tempat tinggal"],
+        ["電気代", "でんきだい", "biaya listrik"],
+        ["電話代", "でんわだい", "biaya telepon"],
+        ["間に合います", "まにあいます", "TEPAT WAKTU"],
+        ["起こします", "おこします", "membangunkan"],
+        ["要ります", "いります", "memerlukan"],
+        ["運転します", "うんてんします", "menyetir"],
+        ["運動します", "うんどうします", "berolahraga"],
+        ["捨てます", "すてます", "membuang"],
+        ["必要", "ひつよう", "penting"],
+        ["押入れ", "おしいれ", "lemari dinding"],
+        ["風呂場", "ふろば", "kamar mandi"],
+        ["生活", "せいかつ", "kehidupan"],
+        ["世界", "せかい", "dunia"],
+        ["訪問します", "ほうもんします", "mengunjungi"],
+        ["下げます", "さげます", "membungkukkan"],
+        ["願います", "ねがいます", "memohon"],
+        ["頑張ります", "がんばります", "bersemangat"],
+        ["深い", "ふかい", "dalam"],
+        ["茶道", "さどう", "upacara minum teh"],
+        ["書道", "しょどう", "seni kaligrafi jepang"],
+        ["相撲", "すもう", "sumo"],
+        ["折り紙", "おりがみ", "kertas lipat"],
+        ["手土産", "てみやげ", "oleh oleh yang di bawa oleh tamu"],
+        ["社会", "しゃかい", "masyarakat"],
+        ["怒ります", "おこります", "memarahi"],
+        ["反対します", "はんたいします", "menentang, tidak setuju"],
+        ["下がります", "さがります", "turun"],
+        ["席を外します", "せきをはずします", "meninggalkan tempat"],
+        ["修正します", "しゅうせいします", "melakukan revisi"],
+        ["頸をきります", "くびをきります", "memecat"],
+        ["詳しい", "くわしい", "detail, teliti"],
+        ["場合", "ばあい", "apabila"],
+        ["理由", "りゆう", "alasan"],
+        ["人間関係", "にんげんかんけい", "hubungan antar manusia"],
+        ["職場", "しょくば", "tempat kerja"],
+        ["本社", "ほんしゃ", "kantor pusat"],
+        ["支店", "してん", "kantor cabang"],
+        ["担当者", "たんとうしゃ", "penanggung jawab"],
+        ["意見", "いけん", "pendapat"],
+        ["外出", "がいしゅう", "pergi keluar"],
+        ["不在", "ふざい", "absen"],
+        ["許可", "きょか", "izin"],
+        ["規則", "きそく", "peraturan"],
+      ];
+
+      /* Bagi rata jadi 2 part sesuai urutan */
+      const PART_COUNT = 2;
+      const PART_LABEL = {};
+      (function tagParts() {
+        const base = Math.floor(RAW.length / PART_COUNT);
+        const extra = RAW.length % PART_COUNT;
+        let idx = 0;
+        for (let p = 1; p <= PART_COUNT; p++) {
+          const size = base + (p <= extra ? 1 : 0);
+          const start = idx + 1;
+          for (let i = 0; i < size; i++) {
+            RAW[idx].push("P" + p);
+            idx++;
+          }
+          PART_LABEL["P" + p] = "Part " + p + " (" + start + "–" + idx + ")";
+        }
+      })();
+      const DATA = RAW;
+
+      function displayHiragana(readingField) {
+        return readingField.split("|").join(" / ");
+      }
+
+      /* ============ POOL PER PART ============ */
+      const shuffleArr = (arr) => {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      };
+      const POOLS = {};
+      for (let p = 1; p <= PART_COUNT; p++)
+        POOLS["P" + p] = DATA.filter((e) => e[3] === "P" + p);
+      POOLS["ALL"] = DATA.slice();
+      PART_LABEL["ALL"] = "Kanji ALL — semua 217 kosakata";
+      const ALL_UNIVERSE = DATA;
+
+      /* ============ OPSI JAWABAN (DALAM HIRAGANA) ============ */
+      function affixScoreHiragana(a, b) {
+        let score = 0;
+        if (a[0] === b[0]) score += 5;
+        let i = a.length - 1,
+          j = b.length - 1,
+          common = 0;
+        while (i >= 0 && j >= 0 && a[i] === b[j]) {
+          common++;
+          i--;
+          j--;
+        }
+        score += Math.min(common, 5);
+        return score;
+      }
+      function getOptions(entry) {
+        const correctDisplay = displayHiragana(entry[1]);
+        const correctPrimary = entry[1].split("|")[0];
+        const seen = new Set([correctDisplay]);
+        let candidates = [];
+        for (const e of ALL_UNIVERSE) {
+          if (e[0] === entry[0]) continue;
+          const display = displayHiragana(e[1]);
+          if (seen.has(display)) continue;
+          seen.add(display);
+          candidates.push({ display, primary: e[1].split("|")[0] });
+        }
+        const sameFirst = candidates.filter(
+          (c) => c.primary[0] === correctPrimary[0],
+        );
+        let pool = sameFirst.length >= 6 ? sameFirst : candidates;
+        const last2 = correctPrimary.slice(-2),
+          last1 = correctPrimary.slice(-1);
+        let poolSameEnd = pool.filter(
+          (c) => c.primary.length >= 2 && c.primary.endsWith(last2),
+        );
+        if (poolSameEnd.length < 4)
+          poolSameEnd = pool.filter((c) => c.primary.endsWith(last1));
+        if (poolSameEnd.length >= 4) pool = poolSameEnd;
+        const scored = pool.map((c) => ({
+          c,
+          score: affixScoreHiragana(c.primary, correctPrimary),
+        }));
+        scored.sort((a, b) => b.score - a.score);
+        const top = scored
+          .slice(0, Math.min(15, scored.length))
+          .map((x) => x.c.display);
+        let chosen = shuffleArr(top).slice(0, 3);
+        while (chosen.length < 3) {
+          const rest = candidates
+            .map((c) => c.display)
+            .filter((d) => !chosen.includes(d));
+          if (!rest.length) break;
+          chosen.push(shuffleArr(rest)[0]);
+        }
+        return shuffleArr([correctDisplay, ...chosen]);
+      }
+
+      /* ================= STATE ================= */
+      let activeKey = null;
+      let currentPool = [];
+      let statusArr = [];
+      let order = [];
+      let orderPos = 0;
+      let liveIdx = null;
+      let viewingIdx = null;
+      let round = 1;
+      let orderMode = "random";
+
+      function buildOrder() {
+        return orderMode === "sequential"
+          ? currentPool.map((_, i) => i)
+          : shuffleArr(currentPool.map((_, i) => i));
+      }
+
+      function computeScores() {
+        const ok = statusArr.filter((s) => s && s.status === "correct").length;
+        const no = statusArr.filter((s) => s && s.status === "wrong").length;
+        document.getElementById("scoreOk").textContent = ok;
+        document.getElementById("scoreNo").textContent = no;
+        const answered = statusArr.filter(Boolean).length;
+        document.getElementById("posNum").textContent = answered;
+        document.getElementById("totalNum").textContent = currentPool.length;
+        document.getElementById("progressFill").style.width =
+          (answered / currentPool.length) * 100 + "%";
+      }
+
+      function renderNavGrid() {
+        const grid = document.getElementById("navGrid");
+        grid.innerHTML = "";
+        currentPool.forEach((entry, idx) => {
+          const tile = document.createElement("div");
+          tile.className = "navtile";
+          const st = statusArr[idx];
+          if (st)
+            tile.classList.add(
+              st.status === "correct"
+                ? "correct"
+                : st.status === "wrong"
+                  ? "wrong"
+                  : "skipped",
+            );
+          if (idx === (viewingIdx !== null ? viewingIdx : liveIdx))
+            tile.classList.add("viewing");
+          tile.textContent = entry[0];
+          tile.title = entry[0];
+          tile.addEventListener("click", () => navTileClick(idx));
+          grid.appendChild(tile);
+        });
+      }
+
+      function navTileClick(idx) {
+        if (!statusArr[idx]) {
+          viewingIdx = null;
+          liveIdx = idx;
+          const p = order.indexOf(idx);
+          if (p >= 0) orderPos = p;
+          renderQuestion(idx, true);
+        } else {
+          viewingIdx = idx;
+          renderQuestion(idx, false);
+        }
+        renderNavGrid();
+      }
+
+      function renderQuestion(idx, interactive) {
+        const entry = currentPool[idx];
+        const [kanji] = entry;
+        document.getElementById("kanjiText").textContent = kanji;
+        document
+          .getElementById("cell")
+          .classList.toggle("short", kanji.length >= 4);
+
+        const optWrap = document.getElementById("options");
+        optWrap.innerHTML = "";
+        const explainBox = document.getElementById("explain");
+        const skipBtn = document.getElementById("skipBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const qLabel = document.getElementById("questionLabel");
+
+        if (interactive) {
+          qLabel.style.display = "block";
+          qLabel.textContent = "Bacaannya yang mana?";
+          explainBox.classList.remove("show");
+          skipBtn.style.display = "inline-block";
+          nextBtn.style.display = "none";
+          const opts = getOptions(entry);
+          opts.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "opt";
+            btn.type = "button";
+            btn.innerHTML = `<span class="num">${i + 1}</span><span>${opt}</span>`;
+            btn.addEventListener("click", () => selectOption(idx, opt, btn));
+            optWrap.appendChild(btn);
+          });
+        } else {
+          const st = statusArr[idx];
+          qLabel.style.display = "none";
+          st.options.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "opt locked";
+            if (opt === displayHiragana(entry[1])) btn.classList.add("correct");
+            else if (opt === st.chosen) btn.classList.add("wrong");
+            else btn.classList.add("dim");
+            btn.innerHTML = `<span class="num">${i + 1}</span><span>${opt}</span>`;
+            optWrap.appendChild(btn);
+          });
+          skipBtn.style.display = "none";
+          nextBtn.style.display = "inline-block";
+          nextBtn.textContent = "Tutup tinjauan →";
+          showExplain(entry, st.status);
+          return;
+        }
+        nextBtn.textContent = "Lanjut →";
+      }
+
+      function lockOptionsUI(entry, chosenLabel) {
+        const correctDisplay = displayHiragana(entry[1]);
+        document.querySelectorAll(".opt").forEach((b) => {
+          b.classList.add("locked");
+          const label = b.querySelector("span:last-child").textContent;
+          if (label === correctDisplay) b.classList.add("correct");
+          else if (label === chosenLabel) b.classList.add("wrong");
+          else b.classList.add("dim");
+        });
+      }
+
+      function selectOption(idx, chosen, btnEl) {
+        if (statusArr[idx]) return;
+        const entry = currentPool[idx];
+        const correct = chosen === displayHiragana(entry[1]);
+        const options = Array.from(document.querySelectorAll(".opt")).map(
+          (b) => b.querySelector("span:last-child").textContent,
+        );
+        lockOptionsUI(entry, chosen);
+        statusArr[idx] = {
+          status: correct ? "correct" : "wrong",
+          options,
+          chosen,
+        };
+        computeScores();
+        renderNavGrid();
+        showExplain(entry, correct ? "correct" : "wrong");
+        document.getElementById("nextBtn").style.display = "inline-block";
+        document.getElementById("skipBtn").style.display = "none";
+      }
+
+      function showExplain(entry, statusKind) {
+        const [kanji, readingField, meaning] = entry;
+        const mainReading = displayHiragana(readingField);
+        const stamp = document.getElementById("stamp");
+        const verdict = document.getElementById("verdictText");
+        if (statusKind === "skipped") {
+          stamp.className = "stamp sk";
+          stamp.textContent = "?";
+          verdict.innerHTML = `<b>${kanji}</b> dibaca <b>${mainReading}</b>, berarti "${meaning}".`;
+        } else if (statusKind === "correct") {
+          stamp.className = "stamp ok";
+          stamp.textContent = "✓";
+          verdict.innerHTML = `Benar! <b>${kanji}</b> dibaca <b>${mainReading}</b>, berarti "${meaning}".`;
+        } else {
+          stamp.className = "stamp no";
+          stamp.textContent = "✕";
+          verdict.innerHTML = `Belum tepat. <b>${kanji}</b> dibaca <b>${mainReading}</b>, berarti "${meaning}".`;
+        }
+        document.getElementById("explain").classList.add("show");
+      }
+
+      document.getElementById("skipBtn").addEventListener("click", () => {
+        const idx = liveIdx;
+        if (statusArr[idx]) return;
+        const entry = currentPool[idx];
+        const options = Array.from(document.querySelectorAll(".opt")).map(
+          (b) => b.querySelector("span:last-child").textContent,
+        );
+        lockOptionsUI(entry, null);
+        statusArr[idx] = { status: "skipped", options, chosen: null };
+        computeScores();
+        renderNavGrid();
+        showExplain(entry, "skipped");
+        document.getElementById("nextBtn").style.display = "inline-block";
+        document.getElementById("skipBtn").style.display = "none";
+      });
+
+      function advanceToNext() {
+        let pos = orderPos;
+        for (let step = 0; step < order.length; step++) {
+          pos++;
+          if (pos >= order.length) break;
+          if (!statusArr[order[pos]]) {
+            orderPos = pos;
+            liveIdx = order[pos];
+            return;
+          }
+        }
+        statusArr = currentPool.map(() => null);
+        computeScores();
+        order = buildOrder();
+        orderPos = 0;
+        liveIdx = order[0];
+        round++;
+        document.getElementById("roundNum").textContent = round;
+        const toast = document.getElementById("roundToast");
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2600);
+      }
+
+      document.getElementById("nextBtn").addEventListener("click", () => {
+        if (viewingIdx !== null) {
+          viewingIdx = null;
+          renderNavGrid();
+          if (statusArr[liveIdx]) renderQuestion(liveIdx, false);
+          else renderQuestion(liveIdx, true);
+          return;
+        }
+        advanceToNext();
+        renderNavGrid();
+        renderQuestion(liveIdx, true);
+      });
+
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        if (!activeKey) return;
+        round = 1;
+        document.getElementById("roundNum").textContent = round;
+        statusArr = currentPool.map(() => null);
+        order = buildOrder();
+        orderPos = 0;
+        liveIdx = order[0];
+        viewingIdx = null;
+        computeScores();
+        renderNavGrid();
+        renderQuestion(liveIdx, true);
+      });
+
+      document.getElementById("orderToggle").addEventListener("click", () => {
+        orderMode = orderMode === "random" ? "sequential" : "random";
+        const icon = document.querySelector("#orderToggle .icon");
+        const label = document.getElementById("orderToggleLabel");
+        if (orderMode === "random") {
+          icon.textContent = "🔀";
+          label.textContent = "Acak";
+        } else {
+          icon.textContent = "🔢";
+          label.textContent = "Berurutan";
+        }
+        if (!activeKey) return;
+        order = buildOrder();
+        const p = order.indexOf(liveIdx);
+        orderPos = p >= 0 ? p : 0;
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!activeKey) return;
+        const answeredLive = statusArr[liveIdx];
+        if (
+          viewingIdx === null &&
+          !answeredLive &&
+          ["1", "2", "3", "4"].includes(e.key)
+        ) {
+          const idx = parseInt(e.key, 10) - 1;
+          const btns = document.querySelectorAll(".opt");
+          if (btns[idx]) btns[idx].click();
+        } else if (
+          e.key === "Enter" &&
+          document.getElementById("nextBtn").style.display !== "none"
+        ) {
+          document.getElementById("nextBtn").click();
+        }
+      });
+
+      function selectGroup(key) {
+        activeKey = key;
+        currentPool = POOLS[key];
+        statusArr = currentPool.map(() => null);
+        order = buildOrder();
+        orderPos = 0;
+        liveIdx = order[0];
+        viewingIdx = null;
+        round = 1;
+
+        document
+          .querySelectorAll(".group-btn")
+          .forEach((b) => b.classList.toggle("active", b.dataset.key === key));
+        document.getElementById("roundNum").textContent = round;
+        document.getElementById("emptyState").style.display = "none";
+        document.getElementById("quizBody").style.display = "block";
+        document.getElementById("navWrap").style.display = "block";
+
+        computeScores();
+        renderNavGrid();
+        renderQuestion(liveIdx, true);
+      }
+
+      const groupBar = document.getElementById("groupBar");
+      for (let p = 1; p <= PART_COUNT; p++) {
+        const key = "P" + p;
+        const btn = document.createElement("button");
+        btn.className = "group-btn";
+        btn.dataset.key = key;
+        btn.textContent = "Part " + p;
+        btn.title = PART_LABEL[key];
+        btn.addEventListener("click", () => selectGroup(key));
+        groupBar.appendChild(btn);
+      }
+      (function addAllButton() {
+        const btn = document.createElement("button");
+        btn.className = "group-btn";
+        btn.dataset.key = "ALL";
+        btn.textContent = "Kanji ALL";
+        btn.title = PART_LABEL["ALL"];
+        btn.addEventListener("click", () => selectGroup("ALL"));
+        groupBar.appendChild(btn);
+      })();
+    </script>
+    <!-- ================= TEMPEL JAVASCRIPT POP-UP DI SINI (TEPAT DI ATAS </body>) ================= -->
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const popup = document.getElementById("customPopup");
+        const closeBtn = document.getElementById("closePopupBtn");
+
+        // Tampilkan pop-up saat web dibuka
+        popup.style.display = "flex";
+
+        // Tutup pop-up saat tombol diklik
+        closeBtn.addEventListener("click", () => {
+          popup.style.display = "none";
+        });
+      });
+    </script>
+    <!-- ========================================================================================== -->
+  </body>
+</html>
